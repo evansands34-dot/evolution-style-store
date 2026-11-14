@@ -1,13 +1,19 @@
 import { Link } from "@tanstack/react-router";
-import { productImage, money, type Product } from "@/lib/products";
+import { type Product } from "@/lib/products";
 
 export function ProductCard({ p, compact }: { p: Product; compact?: boolean }) {
   return (
-    <Link to="/product/$slug" params={{ slug: p.slug }} className="group block overflow-hidden rounded-lg border bg-card transition hover:border-primary">
-      <img src={productImage(p.image)} alt={p.name} loading="lazy" width={1024} height={1024} className="aspect-square w-full object-cover transition group-hover:scale-[1.03]" />
+    <Link
+      to="/product/$slug"
+      params={{ slug: p.slug }}
+      className="group block overflow-hidden rounded-lg border bg-card transition hover:border-primary"
+    >
+      <div className="flex aspect-square w-full items-center justify-center border-b bg-muted/30 text-[10px] font-medium uppercase tracking-[0.3em] text-muted-foreground">
+        No image
+      </div>
       <div className={compact ? "p-2" : "p-3"}>
         <p className={`font-semibold ${compact ? "text-xs" : "text-sm"}`}>{p.name}</p>
-        <p className="text-xs text-primary">{money(p.price)}</p>
+        <p className="text-xs text-primary">${Number(p.price).toFixed(2)}</p>
       </div>
     </Link>
   );

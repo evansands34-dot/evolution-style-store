@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { profileQuery } from "@/lib/user";
-import { productsQuery, productImage, money } from "@/lib/products";
+import { productsQuery, money } from "@/lib/products";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -77,7 +77,9 @@ function Account() {
             if (!p) return null;
             return (
               <li key={o.id} className="flex items-center gap-4 rounded-lg border bg-card p-3">
-                <img src={productImage(p.image)} alt={p.name} className="h-16 w-16 rounded object-cover" />
+                <div className="flex h-16 w-16 items-center justify-center rounded bg-muted/30 text-[8px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
+                  No image
+                </div>
                 <div className="flex-1">
                   <p className="font-semibold">{p.name}</p>
                   <p className="text-xs text-muted-foreground">{new Date(o.created_at).toLocaleDateString()} · Qty {o.quantity} · {money(Number(o.price) * o.quantity)}</p>

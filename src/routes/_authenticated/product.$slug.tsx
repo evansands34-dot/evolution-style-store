@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Star, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { productsQuery, productImage, money } from "@/lib/products";
+import { productsQuery, money } from "@/lib/products";
 import { profileQuery, uid } from "@/lib/user";
 import { useEvo } from "@/components/evo/evo-context";
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,8 @@ function ProductPage() {
   const [rating, setRating] = useState(5);
 
   const { data: reviews = [] } = useQuery({
-    queryKey: ["reviews", p?.id], enabled: !!p,
+    queryKey: ["reviews", p?.id],
+    enabled: !!p,
     queryFn: async () => (await supabase.from("reviews").select("*").eq("product_id", p!.id).order("created_at", { ascending: false })).data ?? [],
   });
 
@@ -40,9 +41,9 @@ function ProductPage() {
 
   async function addToCart() {
     const user_id = await uid();
-    const { data: existing } = await supabase.from("cart_items").select("id,quantity").eq("product_id", p!.id).maybeSingle();
+    const { data: existing } = await supabase.from("cart_items").select("id,quantity").eq("product_id", p.id).maybeSingle();
     if (existing) await supabase.from("cart_items").update({ quantity: existing.quantity + 1 }).eq("id", existing.id);
-    else await supabase.from("cart_items").insert({ user_id, product_id: p!.id });
+    else await supabase.from("cart_items").insert({ user_id, product_id: p.id });
     await qc.invalidateQueries({ queryKey: ["cart"] });
     navigate({ to: "/cart" });
   }
@@ -52,10 +53,11 @@ function ProductPage() {
     if (!body.trim()) return;
     const user_id = await uid();
     const author_name = profile ? `${profile.first_name} ${profile.last_name.charAt(0)}.` : "Shopper";
-    const { error } = await supabase.from("reviews").insert({ user_id, product_id: p!.id, author_name, rating, body: body.trim() });
+    const { error } = await supabase.from("reviews").insert({ user_id, product_id: p.id, author_name, rating, body: body.trim() });
     if (error) { toast.error("Couldn't post your review."); return; }
-    setBody(""); setRating(5);
-    qc.invalidateQueries({ queryKey: ["reviews", p!.id] });
+    setBody("");
+    setRating(5);
+    qc.invalidateQueries({ queryKey: ["reviews", p.id] });
   }
 
   const avg = reviews.length ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length : 0;
@@ -63,7 +65,9 @@ function ProductPage() {
   return (
     <div className="space-y-12">
       <div className="grid gap-8 md:grid-cols-2">
-        <img src={productImage(p.image)} alt={p.name} width={1024} height={1024} className="aspect-square w-full rounded-xl border object-cover" />
+        <div className="flex aspect-square w-full items-center justify-center rounded-xl border border-dashed bg-muted/30 text-xs font-medium uppercase tracking-[0.3em] text-muted-foreground">
+          No image available
+        </div>
         <div className="flex flex-col justify-center gap-4">
           <p className="text-sm uppercase tracking-widest text-muted-foreground">{p.category}</p>
           <h1 className="font-display text-6xl leading-none tracking-wide">{p.name}</h1>
