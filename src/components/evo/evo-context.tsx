@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 
-type Evo = { open: boolean; productSlug?: string; openEvo: (slug?: string) => void; close: () => void };
+type Evo = { open: boolean; productSlug?: string | undefined; openEvo: (slug?: string) => void; close: () => void };
 const Ctx = createContext<Evo | null>(null);
 
 export function EvoProvider({ children }: { children: ReactNode }) {

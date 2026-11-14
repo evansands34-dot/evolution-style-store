@@ -24,7 +24,7 @@ function Cart() {
   async function checkout() {
     const user_id = await uid();
     const { error } = await supabase.from("orders").insert(lines.map((l) => ({ user_id, product_id: l.p.id, quantity: l.quantity, price: l.p.price })));
-    if (error) return toast.error("Checkout failed. Please try again.");
+    if (error) { toast.error("Checkout failed. Please try again."); return; }
     await supabase.from("cart_items").delete().eq("user_id", user_id);
     qc.invalidateQueries();
     toast.success("Order placed! Thanks for shopping Evolution.");

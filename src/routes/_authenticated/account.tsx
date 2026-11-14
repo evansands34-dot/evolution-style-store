@@ -38,10 +38,10 @@ function Account() {
     toast.success("Settings saved");
   }
   async function changePw() {
-    if (pw.length < 6) return toast.error("New password must be at least 6 characters.");
-    if (pw !== pw2) return toast.error("New passwords don't match.");
+    if (pw.length < 6) { toast.error("New password must be at least 6 characters."); return; }
+    if (pw !== pw2) { toast.error("New passwords don't match."); return; }
     const { error } = await supabase.auth.updateUser({ password: pw, current_password: cur } as never);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setCur(""); setPw(""); setPw2(""); toast.success("Password updated");
   }
   async function ret(id: string) {
