@@ -11,10 +11,10 @@ describe("search", () => {
     expect(searchItems(items, "shoes").map((i) => i.name)).toContain("Apex Runner Sneakers");
   });
   it("searching sneakers shows sneakers first", () => {
-    expect(searchItems(items, "sneakers")[0].name).toBe("Apex Runner Sneakers");
+    expect(searchItems(items, "sneakers")[0]!.name).toBe("Apex Runner Sneakers");
   });
   it("typo still finds item", () => {
-    expect(searchItems(items, "hoodi")[0].name).toBe("Core Heavy Hoodie");
+    expect(searchItems(items, "hoodi")[0]!.name).toBe("Core Heavy Hoodie");
   });
   it("unrelated term returns nothing", () => {
     expect(searchItems(items, "laptop")).toHaveLength(0);

@@ -5,7 +5,7 @@ type Msg = { role: "user" | "assistant"; content: string };
 
 export const askEvo = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { messages: Msg[]; productSlug?: string }) => input)
+  .inputValidator((input: { messages: Msg[]; productSlug?: string | undefined }) => input)
   .handler(async ({ data, context }) => {
     const { generateResponse, GatewayError } = await import("@lovable.dev/ai-gateway");
     const { data: products } = await context.supabase

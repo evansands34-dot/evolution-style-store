@@ -53,7 +53,7 @@ function ProductPage() {
     const user_id = await uid();
     const author_name = profile ? `${profile.first_name} ${profile.last_name.charAt(0)}.` : "Shopper";
     const { error } = await supabase.from("reviews").insert({ user_id, product_id: p!.id, author_name, rating, body: body.trim() });
-    if (error) return toast.error("Couldn't post your review.");
+    if (error) { toast.error("Couldn't post your review."); return; }
     setBody(""); setRating(5);
     qc.invalidateQueries({ queryKey: ["reviews", p!.id] });
   }

@@ -8,7 +8,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { uid } from "@/lib/user";
 
 export const Route = createFileRoute("/_authenticated/search")({
-  validateSearch: (s: Record<string, unknown>) => ({ q: typeof s.q === "string" ? s.q : "" }),
+  validateSearch: (s: Record<string, unknown>) => ({ q: typeof s["q"] === "string" ? s["q"] : "" }),
   head: () => ({ meta: [{ title: "Search — Evolution" }, { name: "description", content: "Search Evolution items." }, { property: "og:title", content: "Search — Evolution" }, { property: "og:description", content: "Search Evolution items." }] }),
   component: SearchPage,
 });
